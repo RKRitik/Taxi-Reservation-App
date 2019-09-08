@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Taxi Reservation System</title>
+    <link rel="stylesheet" type="text/css"
+        href="style.css"
+    >
+</head>
+
+<body>
+<div id="page">
+    <h1 id = "h1"> Welcome to RK Taxis </h1>
+    <p></p>
+    <label id="l1" class="Input" >From</label>
+    <input class="Input" value="Choose Location">
+    </br>
+
+    <label class="Input" id="l2">To</label>
+    <input class="Input" value="Choose location">
+
+    <a href="login.html"> Login </a>
+</div>
+<script>
+    async function run() {
+        const response = await fetch('/api'); //sending data as post
+        const json = await response.json();
+        console.log('json.status');
+    }
+    run();
+
+
+</script>
+</body>
+</html>

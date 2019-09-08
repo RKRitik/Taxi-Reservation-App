@@ -1,0 +1,11 @@
+body{
+    background-color:mediumturquoise;
+    margin:auto;
+}
+.input{
+    text-align:center;
+}
+#h1{
+   height:150px;
+    width:300px;
+}
