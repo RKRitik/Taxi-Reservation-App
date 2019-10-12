@@ -1,5 +1,5 @@
 body{
-    background-color:mediumturquoise;
+    background-color:#8B78E6;
     margin:auto;
 }
 .input{
@@ -8,4 +8,10 @@ body{
 #h1{
    height:150px;
     width:300px;
+}
+#list1{
+    background-color: #EAF0F1;
+}
+.mymap{
+    height: 500%;
 }

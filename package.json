@@ -4,7 +4,9 @@
   "description": " book and ride taxis with ease",
   "main": "index.js",
   "dependencies": {
+    "@hapi/joi": "^16.1.7",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
     "nodemon": "^1.19.2",
     "oracledb": "^4.0.1"
   },

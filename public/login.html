@@ -5,6 +5,81 @@
     <title>Taxi Reservation System</title>
 </head>
 <body>
-<a href=index.html id="Home">Home</a>
+<a href = index.html> <img src="home.png" width="100px" height="50px" alt = ""
+align="Right"
+/>
+    </a>
+<!--<form action =http://127.0.0.1:3000/details method ="get">-->
+<!--    -->
+<!--    <input type="submit" value="Check Database" />-->
+
+<!--</form>-->
+
+<label  class="Input" >User ID</label>
+<input class="Input" id="user_id" value="Your USER ID" >
+<button id="checkDB">Check DataBase</button>
+<p id="result"></p>
+<label  class="Input" >User ID</label>
+<input class="Input" id="user_id_c" value="Your USER ID" >
+<br/> <br/>
+<label  class="Input" >First Name</label>
+<input class="Input" id="fname_c" value="Your First Name" >
+<br/> <br/>
+<label  class="Input" >Last Name</label>
+<input class="Input" id="lname_c" value="Your Last Name" >
+<br/> <br/>
+<label  class="Input" >Phone Number</label>
+<input class="Input" id="phone_c" value="Your Phone" >
+<br/> <br/>
+<label class="Input" >Type</label>
+<div class="group" id="type">
+    <label class="radio-inline"><input type="radio" name="optradio" value="1">Customer</label>
+    <label class="radio-inline"><input type="radio" name="optradio" value="0">Driver</label>
+</div>
+<button id="create">Sign Up</button>
+
+<script>
+    document.getElementById('checkDB').addEventListener('click', async event => {
+        const user_id = document.getElementById('user_id').value;
+        const options ={
+            method:'POST',
+            header:{'Content-Type' : 'application/text',},
+            body: JSON.stringify(user_id)
+
+        };
+        const getNameURL = `/details/${user_id}` ;
+        const res = await fetch(getNameURL,options);
+        const json = await res.json();
+        if(json.rows.length==0)
+        document.getElementById('result').innerText = 'no result found';
+        else
+            document.getElementById('result').innerText = json.rows;
+    });
+    document.getElementById('create').addEventListener('click',async event => {
+    const user_id = document.getElementById('user_id_c').value;
+    const fname = document.getElementById('fname_c').value;
+    const lname = document.getElementById('lname_c').value;
+    const phone = document.getElementById('phone_c').value;
+    const ele = document.getElementsByName('optradio');
+    let type_;
+    if(ele[0].checked)
+        type_ = 'Customer' ;
+        else
+        type_ = 'Driver';
+
+    const data = {user_id , fname , lname , phone,type_};
+    const options ={
+        method:'POST',
+        header:{'Content-Type' : 'application/json',},
+        body: JSON.stringify(data)
+
+    };
+    console.log(options);
+    const createAccURL = `/create/${data}` ;
+    const res = await fetch(createAccURL,options);
+    const json = await res.json();
+    });
+</script>
+
 </body>
 </html>

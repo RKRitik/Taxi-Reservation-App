@@ -6,28 +6,92 @@
     <link rel="stylesheet" type="text/css"
         href="style.css"
     >
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+            integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+            crossorigin=""
+    />
+    <style>
+        #mymap {
+            height: 180px;
+        }
+    </style>
+    <script
+            src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""
+    ></script>
 </head>
 
 <body>
-<div id="page">
+
     <h1 id = "h1"> Welcome to RK Taxis </h1>
     <p></p>
-    <label id="l1" class="Input" >From</label>
-    <input class="Input" value="Choose Location">
-    </br>
+    <label  class="Input" >From</label>
+    <input class="Input" id="l1" value="Choose Location" >
+    <br>
 
-    <label class="Input" id="l2">To</label>
-    <input class="Input" value="Choose location">
+    <label class="Input" >To</label>
+    <input class="Input" id="l2" value="Choose location">
 
     <a href="login.html"> Login </a>
-</div>
+    <br>
+    <ol id="list1">
+            <li>
+            choose from the list of available rides
+            </li>
+            <li>
+            introductory offers
+          </li>
+    </ol>
+    <div id="mymap"></div>
+    <script>
+        if ('geolocation' in navigator) {
+            //console.log('geolocation available');
+            navigator.geolocation.getCurrentPosition(position => {
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+                console.log(lat, lon);
+               // document.getElementById('latitude').textContent = lat;
+               // document.getElementById('longitude').textContent = lon;
+                const mymap = L.map('mymap').setView([lat, lon], 15);
+                const attribution =
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+                const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+                const tiles = L.tileLayer(tileUrl, { attribution });
+                tiles.addTo(mymap);
+                const marker = L.marker([lat, lon]).addTo(mymap);
+            });
+        } else {
+            console.log('geolocation not available');
+        }
+    </script>
 <script>
-    async function run() {
-        const response = await fetch('/api'); //sending data as post
-        const json = await response.json();
-        console.log('json.status');
-    }
-    run();
+     const from_ = 'from';
+     const to = 'to' ;
+
+        const data = {from_ , to};
+        const options ={
+            method:'POST',
+            header:{'Content-Type' : 'application/text',},
+            body: JSON.stringify(data)
+
+        };
+     const name = 'Ritik';
+     const reg = '18BCE';
+     async function run() {
+         //const response = await fetch('/api',options); //sending data as post
+         const getNameURL = `/names/${name},${reg}` ;
+         const res = await fetch(getNameURL);
+         //const json = await response.json();
+        //console.log(json.status);
+                }
+          //  run();
+
+
+
+
 
 
 </script>
