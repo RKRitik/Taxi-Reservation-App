@@ -20,28 +20,28 @@ app.post('/api',(request,response)=> {
      });
 });
 app.post('/details/:userId',async (req,res)=>{
-
+    const nameData = req.params.userId.split(',');
+    console.log('name data '+nameData);
    // res.send('Checking Database!!!');
     try {
-        connection = await oracledb.getConnection(  {
+
+        let connection = await oracledb.getConnection(  {
             user          : "SYSTEM",
             password      : 'root',
             connectString : "localhost/oracle"
                                                  });
         console.log('connection made');
-        const myContent = req.params.user_Id;
 
-        let json = JSON.stringify(myContent);
-         let query = 'SELECT * ' +
-             ' FROM user__ ' +
-             ' where user_id = \'' + myContent +'\'' ;
-       // const query = 'SELECT * FROM user__  WHERE F_NAME = \'Ritik\' ';
-        console.log('query : '+ query);
-        const result = await connection.execute(
-            query
-        );
 
-        console.log(result.rowsAffected);
+     //   let json = JSON.stringify(myContent);
+        let query = 'SELECT * ' +
+            ' FROM user__ ' +
+             ' where user_id = \'' + nameData +'\'' ;
+       //const query = ;
+       console.log('query : '+ query);
+        const result = await connection.execute(query);
+        console.log('result rows = ');
+        console.log(result.rows);
         res.json(result);
     } catch (err) {
 
@@ -51,36 +51,38 @@ app.post('/details/:userId',async (req,res)=>{
 
     });
 
-// app.post('/create/:user_id/:fname/:lname/:phone/:type', async (req,res)=>{
-    app.post('/create/:details', async (req,res)=>{
+app.post('/create/:user_id/:fname/:lname/:phone/:type', async (req,res)=>{
+    //console.log('inside create acc');
+  //  app.post('/create/:details', async (req,res)=>{
     // res.send('Checking Database!!!');
+       // const accData = req.params.details.split(',');
+     //   console.log(accData.entries());
     try {
-        connection = await oracledb.getConnection(  {
+       let connection = await oracledb.getConnection(  {
             user          : "SYSTEM",
             password      : 'root',
             connectString : "localhost/oracle"
         });
 
-         console.log(req.params.details.user_id);
-        // const user_Id = req.params.user_id;
-        // const f_name = req.params.fname;
-        // const l_name = req.params.lname;
-        // const phone = req.params.phone;
-        // const type = req.params.type;
-        const user_Id = req.body.user_id;
-         const f_name = req.body.fname;
-        const l_name = req.body.lname;
-        const phone = req.body.phone;
-        const type = req.body.type;
-        console.log(type);
-       // let json = JSON.stringify(user_Id);
+        console.log(req.params.user_id);
+        const user_Id = req.params.user_id;
+        const f_name = req.params.fname;
+        const l_name = req.params.lname;
+        const phone = req.params.phone;
+        const type = req.params.type;
+        //   const user_Id = accData[0];
+       //   const f_name = accData[1];
+       //   const l_name = accData[2];
+       //   const phone = accData[3];
+       //   const type = accData[4];
+        // let json = JSON.stringify(user_Id);
          let query = 'insert into user__  ' +
              ' (user_id , f_name , l_name , phone,user_type)' +
              ' values ( \'' + user_Id + '\' ,' +
              '\' '+ f_name + '\' ,'  +
              '\' '+ l_name + '\' ,'  +
              '\' '+ phone + '\' ,'  +
-             '\' '+ type + '\' ,'  ;
+             '\''+ type + '\' )'  ;
 
              console.log('query : '+ query);
         const result = await connection.execute(

@@ -70,13 +70,14 @@ align="Right"
     const data = {user_id , fname , lname , phone,type_};
     const options ={
         method:'POST',
-        header:{'Content-Type' : 'application/json',},
+        header:{'Content-Type' : 'application/text',},
         body: JSON.stringify(data)
 
     };
     console.log(options);
-    const createAccURL = `/create/${data}` ;
-    const res = await fetch(createAccURL,options);
+  //  const createAccURL = `/create/${data}` ;
+        const createAccURL = `/create/${user_id}/${fname}/${lname}/${phone}/${type_}`;
+        const res = await fetch(createAccURL,options);
     const json = await res.json();
     });
 </script>
