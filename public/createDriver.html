@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Create a driver's Account</h1>
+<label  class="Input" >Driver ID</label>
+<input class="Input" id="driver_id" value="Your Driver ID" >
+<br/> <br/>
+<label  class="Input" >License Number</label>
+<input class="Input" id="lic_num" value="Your License Number" >
+<br/> <br/>
+<label  class="Input" >SHIFT ID</label>
+<input class="Input" id="shift_id" value="Your Shift Id" >
+<br/> <br/>
+<label  class="Input" >License Expiry</label>
+<input type="date" id="lic_exp" value="Your License Expiry" >
+<br/> <br/>
+<button id="create">Submit</button>
+<p id = 'Message'></p>
+<script>
+    document.getElementById('create').addEventListener('click',async event =>{
+        const driver_id = document.getElementById('driver_id').value;
+        const lic_num = document.getElementById('lic_num').value;
+        const lic_exp = document.getElementById('lic_exp').value;
+        const shift_id = document.getElementById('shift_id').value;
+        const data  = {driver_id , lic_num , lic_exp , shift_id};
+        const options = {
+            method : 'POST',
+            headers:{'Content-Type' : 'application/json'},
+            body: JSON.stringify(data)
+        };
+        console.log(options);
+        console.log('posting...');
+        const res = await fetch('/createDriver',options);
+        const json_ = await res.json();
+
+        document.getElementById('Message').innerText = json_.message;
+    });
+</script>
+</body>
+</html>

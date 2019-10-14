@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Taxi Reservation System</title>
+    <link rel="stylesheet" type="text/css"
+          href="style.css"
+    >
 </head>
 <body>
 <a href = index.html> <img src="home.png" width="100px" height="50px" alt = ""
 align="Right"
 />
     </a>
+<a href="book.html"> Book A Ride </a>
+<a href="createDriver.html">Create a Drivers' Account </a>
+<br>
 <!--<form action =http://127.0.0.1:3000/details method ="get">-->
 <!--    -->
 <!--    <input type="submit" value="Check Database" />-->
@@ -37,13 +43,13 @@ align="Right"
     <label class="radio-inline"><input type="radio" name="optradio" value="0">Driver</label>
 </div>
 <button id="create">Sign Up</button>
-
+<p id="Message"></p>
 <script>
     document.getElementById('checkDB').addEventListener('click', async event => {
         const user_id = document.getElementById('user_id').value;
         const options ={
             method:'POST',
-            header:{'Content-Type' : 'application/text',},
+            headers:{'Content-Type' : 'application/text',},
             body: JSON.stringify(user_id)
 
         };
@@ -70,17 +76,26 @@ align="Right"
     const data = {user_id , fname , lname , phone,type_};
     const options ={
         method:'POST',
-        header:{'Content-Type' : 'application/text',},
+        headers:{'Content-Type' : 'application/text',},
         body: JSON.stringify(data)
 
     };
     console.log(options);
   //  const createAccURL = `/create/${data}` ;
         const createAccURL = `/create/${user_id}/${fname}/${lname}/${phone}/${type_}`;
+        if(type=='Driver'){
         const res = await fetch(createAccURL,options);
-    const json = await res.json();
+        const json_ = await res.json();
+         console.log(json_.message);
+        document.getElementById('Message').innerText = json_.message;}
+        else{
+            await fetch(createAccURL,options);
+        }
+
     });
 </script>
 
+
+}
 </body>
 </html>
