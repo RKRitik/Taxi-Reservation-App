@@ -53,7 +53,7 @@ app.post('/details/:userId',async (req,res)=>{
 
     });
 
-app.post('/create/:user_id/:fname/:lname/:phone/:type', async (req,res)=>{
+app.post('/create', async (req,res)=>{
     //console.log('inside create acc');
   //  app.post('/create/:details', async (req,res)=>{
     // res.send('Checking Database!!!');
@@ -67,12 +67,11 @@ app.post('/create/:user_id/:fname/:lname/:phone/:type', async (req,res)=>{
             connectString : "localhost/oracle"
         });
 
-        console.log(req.params.user_id);
-        const user_Id = req.params.user_id;
-        const f_name = req.params.fname;
-        const l_name = req.params.lname;
-        const phone = req.params.phone;
-        type = req.params.type;
+        const user_Id = req.body.user_id;
+        const f_name = req.body.fname;
+        const l_name = req.body.lname;
+        const phone = req.body.phone;
+        type = req.body.type_;
         //   const user_Id = accData[0];
        //   const f_name = accData[1];
        //   const l_name = accData[2];
@@ -91,25 +90,27 @@ app.post('/create/:user_id/:fname/:lname/:phone/:type', async (req,res)=>{
         const result = await connection.execute(
             query
         );
-        await connection.close();
+
        // console.log(result.rowsAffected);
      //   res.json(result);
+        if(type=='Driver'){
+
+            res.setHeader('Content-Type', 'text/html');
+            console.log('sending file...');
+            res.sendFile('public/createDriver.html' , { root : __dirname});
+            // res.end();
+        }
+        else{
+            console.log('sending back...');
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ "message": "Account Created Successfully" }));
+        }
+
     } catch (err) {
 
         res.setHeader('Content-Type', 'application/json');
         console.log(err);
         res.end(JSON.stringify({ "message": "some error Occurred" }));
-    }
-    if(type=='Driver'){
-
-        res.setHeader('Content-Type', 'text/html');
-        console.log('sending file...');
-        res.sendFile('public/createDriver.html' , { root : __dirname});
-       // res.end();
-    }
-    else{
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ "message": "Account Created Successfully" }));
     }
 
 });
