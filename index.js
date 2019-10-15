@@ -1,6 +1,7 @@
 const express =require('express');
 const oracledb =require('oracledb');
 const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 oracledb.autoCommit = false;
 //const Joi = require('@hapi/joi.');
@@ -14,13 +15,7 @@ app.use(express.static('public')); //telling app to use files from directory : "
 app.use(express.json({limit:'1mb'}));//parse incoming requests with JSON payloads
 //app.use(express.bodyParser());
 // the application “listens” for requests that match the specified route(s) and method(s), and when it detects a match, it calls the specified callback function.
-app.post('/api',(request,response)=> {
-    console.log('i got a request!');
-    console.log(request.body);
-    response.json({
-         status: 'success'
-     });
-});
+
 app.post('/details/:userId',async (req,res)=>{
     const nameData = req.params.userId.split(',');
     console.log('name data '+nameData);
@@ -97,7 +92,21 @@ app.post('/create', async (req,res)=>{
 
             res.setHeader('Content-Type', 'text/html');
             console.log('sending file...');
-            res.sendFile('public/createDriver.html' , { root : __dirname});
+            fs.readFile('createDriver.html',null ,function (error,data){
+                if(error){
+                    console.log('error');
+                    res.writeHead(404);
+                    res.write('File Not Found');
+                }
+                else{
+                    console.log(data);
+                    response.write(data);
+                }
+              res.end();
+            });
+            //res.send('createDriver.html');
+            // res.render('createDriver');
+            // res.sendFile('public/createDriver.html' , { root : __dirname});
             // res.end();
         }
         else{
@@ -161,12 +170,35 @@ app.post('/createDriver',async (req,res)=>{
 app.post('/bookRide',async (req,res)=>{
     console.log('got a request to create a new Ride , request body:');
     console.log(req.body);
-    // const lic_exp = req.body.lic_exp;
-    // const lic_num = req.body.lic_num;
-    // const dr_id = req.body.driver_id;
-    // const shft = req.body.shift_id;
-    // const newQuery = `insert into ride (lic_exp , lic_num , driver_id , shift_id) values ( '${lic_exp}','${lic_num}','${dr_id}','${shft}')`;
-    console.log(newQuery);
+     const user_id = req.body.user_id;
+     const book_id = 'AXBX123'; ///////
+     const pickup = req.body.pickup;
+     const drop = req.body.drop;
+     const fare = 1200; /////////
+     const dist = 1200; ////////
+     const taxi = req.body.taxi_type;
+     //query to find a suitable taxi according to txi type
+    const newQuery = `select vehicle_id, driver_id from taxi where type = ${taxi} and taxi_status = 'Free'` ;
+    let result;
+    try {
+        let connection = await oracledb.getConnection(  {
+            user          : "SYSTEM",
+            password      : 'root',
+            connectString : "localhost/oracle"
+        });
+        const result = await connection.execute(
+            newQuery2
+        );
+
+        await connection.close();
+    } catch (err) {
+              console.log(err);
+          }
+    const v_id = result[0].vehicle_id;
+    const driver_id = result[0].owner_id;
+     const newQuery2 = `insert into ride (booking_id , pickup_location , drop_location,fare ,distance, 
+     ,passenger_id,vehicle_id,driver_id ) values ( '${book_id}','${pickup}','${drop}','${fare}','${dist}','${user_id}','${v_id}','${driver_id}')`;
+    console.log(newQuery2);
     try {
         let connection = await oracledb.getConnection(  {
             user          : "SYSTEM",
@@ -188,6 +220,19 @@ app.post('/bookRide',async (req,res)=>{
         console.log(err);
         res.end(JSON.stringify({ "message": "some error Occurred" }));
     }
+    const newQuery3 = `update taxi set taxi_status = 'Booked' where v_id = '${v_id}`;
+    try {
+        let connection = await oracledb.getConnection(  {
+            user          : "SYSTEM",
+            password      : 'root',
+            connectString : "localhost/oracle"
+        });
+        const result = await connection.execute(
+            newQuery3
+        );
 
-
+        await connection.close();
+    } catch (err) {
+        console.log(err);
+    }
 });

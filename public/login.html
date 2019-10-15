@@ -83,11 +83,14 @@ align="Right"
     console.log(options);
   //  const createAccURL = `/create/${data}` ;
         const createAccURL = `/create`;
-
+        if (type_ =='Customer'){
         const res = await fetch(createAccURL,options);
         const json_ = await res.json();
          console.log(json_.message);
-        document.getElementById('Message').innerText = json_.message;
+        document.getElementById('Message').innerText = json_.message;}
+        else{
+            await fetch(createAccURL,options);
+        }
 
 
     });

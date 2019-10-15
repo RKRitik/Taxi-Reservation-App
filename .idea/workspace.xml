@@ -9,6 +9,7 @@
       <change beforePath="$PROJECT_DIR$/Taxi-Reservation-App" beforeDir="false" afterPath="$PROJECT_DIR$/Taxi-Reservation-App" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Taxi-Reservation-App/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Taxi-Reservation-App/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/createDriver.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/createDriver.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/login.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -46,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="265">
-              <caret line="89" column="56" selection-start-line="89" selection-start-column="56" selection-end-line="89" selection-end-column="56" />
+            <state relative-caret-position="389">
+              <caret line="91" column="46" lean-forward="true" selection-start-line="91" selection-start-column="46" selection-end-line="91" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -90,14 +91,17 @@
           <provider selected="true" editor-type-id="images" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="103" column="43" selection-start-line="103" selection-start-column="43" selection-end-line="103" selection-end-column="43" />
+            <state relative-caret-position="29">
+              <caret line="174" column="36" lean-forward="true" selection-start-line="174" selection-start-column="36" selection-end-line="174" selection-end-column="36" />
               <folding>
+                <element signature="e#1968#4015#0" />
                 <element signature="e#4079#4231#0" />
                 <element signature="e#4257#4306#0" />
+                <element signature="e#6675#6839#0" />
+                <element signature="e#8278#8323#0" />
               </folding>
             </state>
           </provider>
@@ -106,8 +110,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/createDriver.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="33" column="10" lean-forward="true" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
+            <state relative-caret-position="129">
+              <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -131,6 +135,10 @@
       <find>add</find>
       <find>header</find>
       <find>headers</find>
+      <find>sendFil</find>
+      <find>da</find>
+      <find>send</find>
+      <find>date</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -150,10 +158,10 @@
         <option value="$PROJECT_DIR$/public/boook.html" />
         <option value="$PROJECT_DIR$/public/style.css" />
         <option value="$PROJECT_DIR$/public/index.html" />
-        <option value="$PROJECT_DIR$/public/createDriver.html" />
         <option value="$PROJECT_DIR$/public/book.html" />
-        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/public/createDriver.html" />
         <option value="$PROJECT_DIR$/public/login.html" />
+        <option value="$PROJECT_DIR$/index.js" />
       </list>
     </option>
   </component>
@@ -175,11 +183,6 @@
             <path>
               <item name="DBMS_Project" type="b2602c69:ProjectViewProjectNode" />
               <item name="DBMS_Project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DBMS_Project" type="b2602c69:ProjectViewProjectNode" />
-              <item name="DBMS_Project" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="DBMS_Project" type="b2602c69:ProjectViewProjectNode" />
@@ -249,12 +252,12 @@
       <workItem from="1571048746893" duration="10429000" />
       <workItem from="1571080426746" duration="4794000" />
       <workItem from="1571085300819" duration="239000" />
-      <workItem from="1571137623293" duration="1106000" />
+      <workItem from="1571137623293" duration="5906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69994000" />
+    <option name="totallyTimeSpent" value="74794000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
@@ -287,7 +290,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/index.js</url>
-          <line>6</line>
+          <line>7</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -359,16 +362,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/erDiagram.bmp">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/createDriver.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="33" column="10" lean-forward="true" selection-start-line="33" selection-start-column="10" selection-end-line="33" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/book.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -376,21 +369,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
+    <entry file="file://$PROJECT_DIR$/erDiagram.bmp">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/createDriver.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="103" column="43" selection-start-line="103" selection-start-column="43" selection-end-line="103" selection-end-column="43" />
-          <folding>
-            <element signature="e#4079#4231#0" />
-            <element signature="e#4257#4306#0" />
-          </folding>
+        <state relative-caret-position="129">
+          <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="265">
-          <caret line="89" column="56" selection-start-line="89" selection-start-column="56" selection-end-line="89" selection-end-column="56" />
+        <state relative-caret-position="389">
+          <caret line="91" column="46" lean-forward="true" selection-start-line="91" selection-start-column="46" selection-end-line="91" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29">
+          <caret line="174" column="36" lean-forward="true" selection-start-line="174" selection-start-column="36" selection-end-line="174" selection-end-column="36" />
+          <folding>
+            <element signature="e#1968#4015#0" />
+            <element signature="e#4079#4231#0" />
+            <element signature="e#4257#4306#0" />
+            <element signature="e#6675#6839#0" />
+            <element signature="e#8278#8323#0" />
+          </folding>
         </state>
       </provider>
     </entry>
