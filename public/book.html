@@ -7,7 +7,73 @@
         Booking A Ride
     </h1>
 </head>
-<body>
 
+<body>
+<label  class="Input" >Pickup Location</label>
+<input class="Input" id="pickup" value="" >
+<br/> <br/>
+<label  class="Input" >Drop Location</label>
+<input class="Input" id="drop" value="" >
+<br/> <br/>
+<script>
+    let myCookies = {};
+    let kv = document.cookie.split(";");
+    let i = 0;
+    for (let id in kv){
+        let cookie = kv[id].split("=");
+        if (i ===0)
+            document.getElementById('pickup').value = cookie[1];
+        else
+            document.getElementById('drop').value = cookie[1];
+        i++;
+
+    }
+</script>
+<label  class="Input" >User ID</label>
+<input class="Input" id="user_id" value="Your User ID" >
+<br/> <br/>
+<label class="radio-inline"><input type="radio" name="optradio" value="0">Economy</label>
+<label class="radio-inline"><input type="radio" name="optradio" value="1">Standard</label>
+<label class="radio-inline"><input type="radio" name="optradio" value="2">Premium</label>
+<br/> <br/>
+<button id="create">Submit</button>
+<p id = 'Message'></p>
+<script>
+
+    document.getElementById('create').addEventListener('click',async event => {
+        const pickup = document.getElementById('pickup').value;
+        const user_id = document.getElementById('user_id').value;
+        const drop = document.getElementById('drop').value;
+
+        const ele = document.getElementsByName('optradio');
+        let taxi_type;
+        if(ele[0].checked)
+            taxi_type = 'Economy' ;
+        else if(ele[1].checked)
+            taxi_type = 'Standard';
+        else
+            taxi_type = 'Premium';
+
+        const data = {user_id , pickup , drop , taxi_type};
+        const options ={
+            method:'POST',
+            headers:{'Content-Type' : 'application/json',},
+            body: JSON.stringify(data)
+
+        };
+        console.log(options);
+
+        const createAccURL = `/bookRide`;
+
+            const res = await fetch(createAccURL,options);
+            const json_ = await res.json();
+            console.log(json_.message);
+            document.getElementById('Message').innerText = json_.message;
+
+
+
+    });
+</script>
+<a href ='index.html'>HomePage</a>
 </body>
 </html>

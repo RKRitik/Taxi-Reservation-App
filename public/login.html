@@ -6,25 +6,37 @@
     <link rel="stylesheet" type="text/css"
           href="style.css"
     >
+    <script>
+        let num = 0;
+    </script>
 </head>
-<body>
-<a href = index.html> <img src="home.png" width="100px" height="50px" alt = ""
-align="Right"
-/>
+
+<a href = index.html align="Right"> HomePage
+
+
     </a>
+</br>
 <a href="book.html"> Book A Ride </a>
+</br>
 <a href="createDriver.html">Create a Drivers' Account </a>
 <br>
 <!--<form action =http://127.0.0.1:3000/details method ="get">-->
 <!--    -->
 <!--    <input type="submit" value="Check Database" />-->
 
-<!--</form>-->
+
 
 <label  class="Input" >User ID</label>
 <input class="Input" id="user_id" value="Your USER ID" >
-<button id="checkDB">Check DataBase</button>
+<button id="login">Login</button>
 <p id="result"></p>
+</br>
+</br>
+<table border="1 id="rides">
+
+
+</table>
+<h3>Or Sign UP</h3>
 <label  class="Input" >User ID</label>
 <input class="Input" id="user_id_c" value="Your USER ID" >
 <br/> <br/>
@@ -45,21 +57,67 @@ align="Right"
 <button id="create">Sign Up</button>
 <p id="Message"></p>
 <script>
-    document.getElementById('checkDB').addEventListener('click', async event => {
-        const user_id = document.getElementById('user_id').value;
+    document.getElementById('login').addEventListener('click',async event => {
+        const userid = document.getElementById('user_id').value;
+        const data = {userid };
         const options ={
-            method:'POST',
-            headers:{'Content-Type' : 'application/text',},
-            body: JSON.stringify(user_id)
+            method:'GET',
+            // headers:{'Content-Type' : 'application/json',},
+            // body: JSON.stringify(data)
 
         };
-        const getNameURL = `/details/${user_id}` ;
-        const res = await fetch(getNameURL,options);
-        const json = await res.json();
-        if(json.rows.length==0)
-        document.getElementById('result').innerText = 'no result found';
-        else
-            document.getElementById('result').innerText = json.rows;
+        const createAccURL = `/details/${userid}`;
+            const res = await fetch(createAccURL,options);
+            const json_ = await res.json();
+            console.log(json_);
+            if(json_.message)
+            document.getElementById('result').innerText = json_.message;
+            else{
+                if(num===0){
+                    let tab = document.getElementsByTagName('table')[0];
+                    let newRow = tab.insertRow(0);
+                    num+=1;
+                    let cell1 = newRow.insertCell(0);
+                    let cell2 = newRow.insertCell(1);
+                    let cell3 = newRow.insertCell(2);
+                    let cell4 = newRow.insertCell(3);
+                    let cell5 = newRow.insertCell(4);
+                    let cell6 = newRow.insertCell(5);
+                    let cell7 = newRow.insertCell(5);
+                    cell1.innerHTML = 'Booking ID';
+                    cell2.innerHTML = "Pickup Location";
+                    cell3.innerHTML = "Drop Location";
+                    cell4.innerHTML = "Fare";
+                    cell5.innerHTML = "Distance";
+                    cell6.innerHTML = "Vehicle ID";
+                    if(json_[1].type==='Customer')
+                    cell7.innerHTML = "Driver ID";
+                    else cell7.innerHTML = "Passenger ID";
+                }
+                console.log(json_);
+                let tab = document.getElementsByTagName('table')[0];
+                let newRow = tab.insertRow(1);
+                let cell1 = newRow.insertCell(0);
+                let cell2 = newRow.insertCell(1);
+                let cell3 = newRow.insertCell(2);
+                let cell4 = newRow.insertCell(3);
+                let cell5 = newRow.insertCell(4);
+                let cell6 = newRow.insertCell(5);
+                let cell7 = newRow.insertCell(5);
+                cell1.innerHTML = json_[0][0];
+                cell2.innerHTML = json_[0][1];
+                cell3.innerHTML = json_[0][2];
+                cell4.innerHTML = json_[0][6];
+                cell5.innerHTML = json_[0][7];
+                cell6.innerHTML = json_[0][9];
+                if(json_[1].type==='Customer')
+                cell7.innerHTML = json_[0][10];
+                else
+                    cell7.innerHTML = json_[0][8];
+
+            }
+
+
     });
     document.getElementById('create').addEventListener('click',async event => {
     const user_id = document.getElementById('user_id_c').value;

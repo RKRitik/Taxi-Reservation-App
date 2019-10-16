@@ -1,7 +1,7 @@
 const express =require('express');
 const oracledb =require('oracledb');
 const path = require('path');
-const fs = require('fs');
+// const fs = require('fs');
 const bodyParser = require('body-parser');
 oracledb.autoCommit = false;
 //const Joi = require('@hapi/joi.');
@@ -14,36 +14,83 @@ app.use(bodyParser.json());
 app.use(express.static('public')); //telling app to use files from directory : "public"
 app.use(express.json({limit:'1mb'}));//parse incoming requests with JSON payloads
 //app.use(express.bodyParser());
-// the application “listens” for requests that match the specified route(s) and method(s), and when it detects a match, it calls the specified callback function.
 
-app.post('/details/:userId',async (req,res)=>{
-    const nameData = req.params.userId.split(',');
-    console.log('name data '+nameData);
-   // res.send('Checking Database!!!');
-    try {
+app.get('/details/:userId',async (req,res)=>{
+    const userId = req.params.userId;
+       try {
+           let connection = await oracledb.getConnection({
+               user: "SYSTEM",
+               password: 'root',
+               connectString: "localhost/oracle"
+           });
+           let query = `SELECT * FROM user__ where user_id = '${userId}'`;
+           console.log(query);
+           const result = await connection.execute(query);
+           await connection.close();
+           if (result.rows.length) {
+               const type = result.rows[0][6];
+               const user_id = result.rows[0][0];
+               if (type === 'Customer')
+               {
+                   let query2 = `SELECT * FROM RIDE WHERE PASSENGER_ID ='${user_id}'`;
+                   console.log(query2);
+                   try {let connection = await oracledb.getConnection({
+                       user: "SYSTEM",
+                       password: 'root',
+                       connectString: "localhost/oracle"
+                   });
+                       let result2 = await connection.execute(query2);
+                       connection.close();
 
-        let connection = await oracledb.getConnection(  {
-            user          : "SYSTEM",
-            password      : 'root',
-            connectString : "localhost/oracle"
-                                                 });
-        console.log('connection made');
+                       result2.rows.push({type : 'Customer'});
+                       if (result2.rows.length) {
 
+                           res.setHeader('Content-Type', 'application/json');
+                           res.end(JSON.stringify(result2.rows));
+                       } else {
+                           res.setHeader('Content-Type', 'application/json');
+                           res.end(JSON.stringify({"message": "No Booked Rides"}));
+                       }
+                   } catch (err) {
+                       res.setHeader('Content-Type', 'application/json');
 
-     //   let json = JSON.stringify(myContent);
-        let query = 'SELECT * ' +
-            ' FROM user__ ' +
-             ' where user_id = \'' + nameData +'\'' ;
-       //const query = ;
-       console.log('query : '+ query);
-        const result = await connection.execute(query);
-        console.log('result rows = ');
-        console.log(result.rows);
-        res.json(result);
-    } catch (err) {
-
-
-        console.error(err);
+                       res.end(JSON.stringify({"message": "Some Error Occurred Try Again"}));
+                   }
+               }
+               else {
+                   let query2 = `SELECT * FROM RIDE WHERE DRIVER_ID = '${user_id}'`;
+                   console.log(query2);
+                   try {
+                       let connection = await oracledb.getConnection({
+                           user: "SYSTEM",
+                           password: 'root',
+                           connectString: "localhost/oracle"
+                       });
+                       let result2 = await connection.execute(query2);
+                       result2.rows.push({type : 'Driver'});
+                       await connection.close();
+                       if (result2.rows.length) {
+                           res.setHeader('Content-Type', 'application/json');
+                           res.end(JSON.stringify(result2.rows));
+                       } else {
+                           res.setHeader('Content-Type', 'application/json');
+                           res.end(JSON.stringify({"message": "No Customers"}));
+                       }
+                   }
+                   catch (err) {
+                       res.setHeader('Content-Type', 'application/json');
+                       res.end(JSON.stringify({"message": "Some Error Occurred Try Again"}));
+                   }
+               }
+           }
+           else {
+               res.setHeader('Content-Type', 'application/json');
+               res.end(JSON.stringify({"message": "No Such Record Found Try Again"}));
+           }
+       }
+     catch (err) {
+           res.setHeader('Content-Type', 'application/json');
+           res.end(JSON.stringify({ "message": "Some Error Occurred Try Again" }));
     }
 
     });
@@ -67,13 +114,7 @@ app.post('/create', async (req,res)=>{
         const l_name = req.body.lname;
         const phone = req.body.phone;
         type = req.body.type_;
-        //   const user_Id = accData[0];
-       //   const f_name = accData[1];
-       //   const l_name = accData[2];
-       //   const phone = accData[3];
-       //   const type = accData[4];
-        // let json = JSON.stringify(user_Id);
-         let query = 'insert into user__  ' +
+        let query = 'insert into user__  ' +
              ' (user_id , f_name , l_name , phone,user_type)' +
              ' values ( \'' + user_Id + '\' ,' +
              '\' '+ f_name + '\' ,'  +
@@ -90,25 +131,15 @@ app.post('/create', async (req,res)=>{
      //   res.json(result);
         if(type=='Driver'){
 
-            res.setHeader('Content-Type', 'text/html');
-            console.log('sending file...');
-            fs.readFile('createDriver.html',null ,function (error,data){
-                if(error){
-                    console.log('error');
-                    res.writeHead(404);
-                    res.write('File Not Found');
-                }
-                else{
-                    console.log(data);
-                    response.write(data);
-                }
-              res.end();
-            });
+            console.log('sending back...');
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ "message": "Driver Account Created Successfully" }));
+            }
             //res.send('createDriver.html');
             // res.render('createDriver');
             // res.sendFile('public/createDriver.html' , { root : __dirname});
             // res.end();
-        }
+
         else{
             console.log('sending back...');
             res.setHeader('Content-Type', 'application/json');
@@ -124,16 +155,11 @@ app.post('/create', async (req,res)=>{
 
 });
 
+function randomString(length) {
+    return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+}
 
-app.get('/names/:data', async (req,res)=>{
-    const nameData = req.params.data.split(','); ;
-    console.log('I got a request to find names whose details are :');
-    console.log(nameData);
 
-});
-app.get('/current',()=>{
-   console.log('got request inside current');
-});
 app.post('/createDriver',async (req,res)=>{
     console.log('got a request to create a drivers account , request body:');
     console.log(req.body);
@@ -167,72 +193,91 @@ app.post('/createDriver',async (req,res)=>{
 
 
 });
+
 app.post('/bookRide',async (req,res)=>{
-    console.log('got a request to create a new Ride , request body:');
+    //console.log('got a request to create a new Ride , request body:');
+    const rate = 10,base = 50;
     console.log(req.body);
      const user_id = req.body.user_id;
-     const book_id = 'AXBX123'; ///////
+     const book_id = randomString(8); ///////
      const pickup = req.body.pickup;
      const drop = req.body.drop;
-     const fare = 1200; /////////
      const dist = 1200; ////////
+     const fare = (base + dist/1000 )*rate; /////////
+
      const taxi = req.body.taxi_type;
      //query to find a suitable taxi according to txi type
-    const newQuery = `select vehicle_id, driver_id from taxi where type = ${taxi} and taxi_status = 'Free'` ;
-    let result;
+    const newQuery = `select v_id, owner_id from taxi where type_ = '${taxi}' and taxi_status = 'Free'` ;
+    console.log(newQuery);
+    let result,error=false;
     try {
         let connection = await oracledb.getConnection(  {
             user          : "SYSTEM",
             password      : 'root',
             connectString : "localhost/oracle"
         });
-        const result = await connection.execute(
-            newQuery2
-        );
-
-        await connection.close();
-    } catch (err) {
-              console.log(err);
-          }
-    const v_id = result[0].vehicle_id;
-    const driver_id = result[0].owner_id;
-     const newQuery2 = `insert into ride (booking_id , pickup_location , drop_location,fare ,distance, 
-     ,passenger_id,vehicle_id,driver_id ) values ( '${book_id}','${pickup}','${drop}','${fare}','${dist}','${user_id}','${v_id}','${driver_id}')`;
-    console.log(newQuery2);
-    try {
-        let connection = await oracledb.getConnection(  {
-            user          : "SYSTEM",
-            password      : 'root',
-            connectString : "localhost/oracle"
-        });
-        const result = await connection.execute(
+        result = await connection.execute(
             newQuery
+            // newQuery,
+            // { fetchInfo: {"C": {type: oracledb.STRING } }}
         );
+
         await connection.close();
-        res.setHeader('Content-Type', 'application/json');
-
-        res.end(JSON.stringify({ "message": "Account Created Successfully" }));
-        // console.log(result.rowsAffected);
-        //   res.json(result);
     } catch (err) {
-
-        res.setHeader('Content-Type', 'application/json');
         console.log(err);
-        res.end(JSON.stringify({ "message": "some error Occurred" }));
+        error = true
     }
-    const newQuery3 = `update taxi set taxi_status = 'Booked' where v_id = '${v_id}`;
-    try {
-        let connection = await oracledb.getConnection(  {
-            user          : "SYSTEM",
-            password      : 'root',
-            connectString : "localhost/oracle"
-        });
-        const result = await connection.execute(
-            newQuery3
-        );
+    let js,v_id,driver_id;
+    console.log(result);
+    if (result.rows.length) {
+          v_id = result.rows[0][0];
+              driver_id = result.rows[0][1];
 
-        await connection.close();
-    } catch (err) {
-        console.log(err);
+
+        const newQuery2 = `insert into ride (booking_id , pickup_location , drop_location,fare ,distance, 
+     passenger_id,vehicle_id,driver_id ) values ( '${book_id}','${pickup}','${drop}','${fare}','${dist}'
+      ,'${user_id}','${v_id}','${driver_id}')`;
+        console.log(newQuery2);
+        try {
+            let connection = await oracledb.getConnection({
+                user: "SYSTEM",
+                password: 'root',
+                connectString: "localhost/oracle"
+            });
+            const result = await connection.execute(
+                newQuery
+            );
+
+            res.setHeader('Content-Type', 'application/json');
+
+            res.end(JSON.stringify({"message": "Ride Booked Successfully"}));
+            // console.log(result.rowsAffected);
+            //   res.json(result);
+        } catch (err) {
+
+            res.setHeader('Content-Type', 'application/json');
+            console.log(err);
+            res.end(JSON.stringify({"message": "some error Occurred Try Again"}));
+        }
+        const newQuery3 = `update taxi set taxi_status = 'Booked' where v_id = '${v_id}'`;
+        console.log(newQuery3);
+        try {
+            let connection = await oracledb.getConnection({
+                user: "SYSTEM",
+                password: 'root',
+                connectString: "localhost/oracle"
+            });
+            const result = await connection.execute(
+                newQuery3
+            );
+
+            await connection.close();
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        res.setHeader('Content-Type', 'application/json');
+
+        res.end(JSON.stringify({ "message": "some error Occurred Try Again" }));
     }
 });
