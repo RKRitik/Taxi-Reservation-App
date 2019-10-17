@@ -42,10 +42,11 @@ app.get('/details/:userId',async (req,res)=>{
                        let result2 = await connection.execute(query2);
                        connection.close();
 
-                       result2.rows.push({type : 'Customer'});
+
                        if (result2.rows.length) {
 
                            res.setHeader('Content-Type', 'application/json');
+                           result2.rows.push({type : 'Customer'});
                            res.end(JSON.stringify(result2.rows));
                        } else {
                            res.setHeader('Content-Type', 'application/json');
@@ -67,10 +68,12 @@ app.get('/details/:userId',async (req,res)=>{
                            connectString: "localhost/oracle"
                        });
                        let result2 = await connection.execute(query2);
-                       result2.rows.push({type : 'Driver'});
+
                        await connection.close();
                        if (result2.rows.length) {
                            res.setHeader('Content-Type', 'application/json');
+                           result2.rows.push({type : 'Driver'});
+                           console.log(result2.rows);
                            res.end(JSON.stringify(result2.rows));
                        } else {
                            res.setHeader('Content-Type', 'application/json');
@@ -133,9 +136,9 @@ app.post('/create', async (req,res)=>{
 
             console.log('sending back...');
             res.setHeader('Content-Type', 'application/json');
-            res.end(JSON.stringify({ "message": "Driver Account Created Successfully" }));
+           res.end(JSON.stringify({ "message": "Driver Account Created Successfully" }));
             }
-            //res.send('createDriver.html');
+
             // res.render('createDriver');
             // res.sendFile('public/createDriver.html' , { root : __dirname});
             // res.end();

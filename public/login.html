@@ -58,6 +58,7 @@
 <p id="Message"></p>
 <script>
     document.getElementById('login').addEventListener('click',async event => {
+
         const userid = document.getElementById('user_id').value;
         const data = {userid };
         const options ={
@@ -69,7 +70,7 @@
         const createAccURL = `/details/${userid}`;
             const res = await fetch(createAccURL,options);
             const json_ = await res.json();
-            console.log(json_);
+           console.log(json_.message);
             if(json_.message)
             document.getElementById('result').innerText = json_.message;
             else{

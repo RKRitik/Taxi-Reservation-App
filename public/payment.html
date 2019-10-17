@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Payment Portal</title>
+</head>
+<body><label  class="Input" >Payment </label>
+<input class="Input" id="user_id" value="Your USER ID" >
+<button id="pay">Pay</button>
+<p id="result"></p>
+</br>
+</br> </body>
+<script>
+    document.getElementById('pay').addEventListener('click',async event =>{
+
+        const pay_id  = randomString(8);
+        const booking_id = "";
+        const user_id = "";
+        const type = document.getElementById('option').value;
+ const query = `insert into pays_for (BOOKING_ID,USER_ID ,PAYMENT_TYPE ,PAYMENT_ID) values ('${pay_id}' , '${user_id}' , '${type}' , '${pay_id}'`;
+ });
+ </script>
+
+</html>
