@@ -99,11 +99,7 @@ app.get('/details/:userId',async (req,res)=>{
     });
 
 app.post('/create', async (req,res)=>{
-    //console.log('inside create acc');
-  //  app.post('/create/:details', async (req,res)=>{
-    // res.send('Checking Database!!!');
-       // const accData = req.params.details.split(',');
-     //   console.log(accData.entries());
+
     let type ;
     try {
        let connection = await oracledb.getConnection(  {
@@ -162,6 +158,32 @@ function randomString(length) {
     return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
 }
 
+app.post('/pay',async (req,res)=>{
+    const  user_id = req.body.user_id;
+    const  type = req.body.payment_type;
+    const book_id = req.body.booking_id;
+    const pay_id = randomString(8);
+    try {
+        let connection = await oracledb.getConnection({
+            user: "SYSTEM",
+            password: 'root',
+            connectString: "localhost/oracle"
+        });
+        const query = `insert into pays_for (BOOKING_ID,USER_ID ,PAYMENT_TYPE ,PAYMENT_ID) values ('${book_id}' , '${user_id}' , '${type}' , '${pay_id}'`;
+        const result = await connection.execute(query);
+        if(result.rows.length){
+            console.log(result.rows);
+        }
+        else{
+            res.setHeaders('ContentType','Application/JSON');
+            res.end(JSON.stringify({message:'Payment Failed'}));
+        }
+    }
+    catch(err){
+        res.setHeaders('ContentType','Application/JSON');
+        res.end(JSON.stringify({message:'Some Error Occurred'}));
+    }
+});
 
 app.post('/createDriver',async (req,res)=>{
     console.log('got a request to create a drivers account , request body:');
@@ -226,9 +248,14 @@ app.post('/bookRide',async (req,res)=>{
         );
 
         await connection.close();
-    } catch (err) {
+    }
+    catch (err) {
         console.log(err);
         error = true
+        res.setHeader('Content-Type', 'application/json');
+
+        res.end(JSON.stringify({ "message": "Some Error Occurred (Try checking Login ID) "}));
+
     }
     let js,v_id,driver_id;
     console.log(result);
@@ -248,7 +275,7 @@ app.post('/bookRide',async (req,res)=>{
                 connectString: "localhost/oracle"
             });
             const result = await connection.execute(
-                newQuery
+                newQuery2
             );
 
             res.setHeader('Content-Type', 'application/json');
@@ -256,11 +283,12 @@ app.post('/bookRide',async (req,res)=>{
             res.end(JSON.stringify({"message": "Ride Booked Successfully"}));
             // console.log(result.rowsAffected);
             //   res.json(result);
-        } catch (err) {
+        }
+        catch (err) {
 
             res.setHeader('Content-Type', 'application/json');
             console.log(err);
-            res.end(JSON.stringify({"message": "some error Occurred Try Again"}));
+            res.end(JSON.stringify({"message": "some error Occurred Try Again(check login id)"}));
         }
         const newQuery3 = `update taxi set taxi_status = 'Booked' where v_id = '${v_id}'`;
         console.log(newQuery3);
@@ -281,6 +309,6 @@ app.post('/bookRide',async (req,res)=>{
     } else {
         res.setHeader('Content-Type', 'application/json');
 
-        res.end(JSON.stringify({ "message": "some error Occurred Try Again" }));
+        res.end(JSON.stringify({ "message": "NO Suitable Rides Found" }));
     }
 });

@@ -12,12 +12,31 @@
 </br> </body>
 <script>
     document.getElementById('pay').addEventListener('click',async event =>{
+        let booking_id = "";
+        let user_id = "";
+        let myCookies = {};
+        let kv = document.cookie.split(";");
+        let i = 0;
+        for (let id in kv){
+            let cookie = kv[id].split("=");
+            if (i ===0)
+                booking_id = cookie[1];
+            else
+                user_id = cookie[1];
+            i++;
 
-        const pay_id  = randomString(8);
-        const booking_id = "";
-        const user_id = "";
+        }
+
+        const data = {user_id,payment_type,booking_id};
         const type = document.getElementById('option').value;
- const query = `insert into pays_for (BOOKING_ID,USER_ID ,PAYMENT_TYPE ,PAYMENT_ID) values ('${pay_id}' , '${user_id}' , '${type}' , '${pay_id}'`;
+        const options ={
+            method : 'POST',
+            headers:{'Content-Type' : 'application/json'},
+            body: JSON.stringify(data)
+        };
+        const result = fetch('/pay',options);
+        const json_ = await result.json();
+        document.getElementById('Message').innerText = json_.message;
  });
  </script>
 

@@ -32,8 +32,6 @@
             headers:{'Content-Type' : 'application/json'},
             body: JSON.stringify(data)
         };
-        console.log(options);
-        console.log('posting...');
         const res = await fetch('/createDriver',options);
         const json_ = await res.json();
 
